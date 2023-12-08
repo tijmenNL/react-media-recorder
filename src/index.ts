@@ -77,7 +77,7 @@ export function useReactMediaRecorder({
   stopStreamsOnStop = true,
   askPermissionOnMount = false,
 }: ReactMediaRecorderHookProps): ReactMediaRecorderRenderProps {
-  const mediaRecorder = useRef<IMediaRecorder | null >(null);
+  const mediaRecorder = useRef<IMediaRecorder | null>(null);
   const mediaChunks = useRef<Blob[]>([]);
   const mediaStream = useRef<MediaStream | null>(null);
   const [status, setStatus] = useState<StatusMessages>("idle");
@@ -120,7 +120,7 @@ export function useReactMediaRecorder({
         mediaStream.current = stream;
       } else {
         const stream = await window.navigator.mediaDevices.getUserMedia(
-          requiredMedia,
+          requiredMedia
         );
         mediaStream.current = stream;
       }
@@ -138,7 +138,7 @@ export function useReactMediaRecorder({
 
     if (screen) {
       if (!window.navigator.mediaDevices.getDisplayMedia) {
-        throw new Error("This browser doesn\'t support screen capturing");
+        throw new Error("This browser doesn't support screen capturing");
       }
     }
 
@@ -147,14 +147,14 @@ export function useReactMediaRecorder({
         navigator.mediaDevices.getSupportedConstraints();
       const unSupportedConstraints = Object.keys(mediaType).filter(
         (constraint) =>
-          !(supportedMediaConstraints as { [key: string]: any })[constraint],
+          !(supportedMediaConstraints as { [key: string]: any })[constraint]
       );
 
       if (unSupportedConstraints.length > 0) {
         console.error(
           `The constraints ${unSupportedConstraints.join(
-            ",",
-          )} doesn't support on this browser. Please check your ReactMediaRecorder component.`,
+            ","
+          )} doesn't support on this browser. Please check your ReactMediaRecorder component.`
         );
       }
     };
@@ -169,7 +169,7 @@ export function useReactMediaRecorder({
     if (mediaRecorderOptions && mediaRecorderOptions.mimeType) {
       if (!MediaRecorder.isTypeSupported(mediaRecorderOptions.mimeType)) {
         console.error(
-          `The specified MIME type you supplied for MediaRecorder doesn't support this browser`,
+          `The specified MIME type you supplied for MediaRecorder doesn't support this browser`
         );
       }
     }
@@ -190,7 +190,7 @@ export function useReactMediaRecorder({
     video,
     getMediaStream,
     mediaRecorderOptions,
-    askPermissionOnMount,
+    askPermissionOnMount
   ]);
 
   // Media Recorder Handlers
@@ -213,7 +213,7 @@ export function useReactMediaRecorder({
         return;
       }
       mediaRecorder.current = new ExtendableMediaRecorder(
-        mediaStream.current, mediaRecorderOptions || undefined,
+        mediaStream.current, mediaRecorderOptions || undefined
       );
       mediaRecorder.current.ondataavailable = onRecordingActive;
       mediaRecorder.current.onstop = onRecordingStop;
@@ -239,7 +239,7 @@ export function useReactMediaRecorder({
     const [chunk] = mediaChunks.current;
     const blobProperty: BlobPropertyBag = Object.assign(
       { type: chunk.type },
-      blobPropertyBag || (video ? { type: "video/mp4" } : { type: "audio/wav" }),
+      blobPropertyBag || (video ? { type: "video/mp4" } : { type: "audio/wav" })
     );
     const blob = new Blob(mediaChunks.current, blobProperty);
     const url = URL.createObjectURL(blob);
