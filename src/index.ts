@@ -84,12 +84,26 @@ export function useReactMediaRecorder({
   const [isAudioMuted, setIsAudioMuted] = useState<boolean>(false);
   const [mediaBlobUrl, setMediaBlobUrl] = useState<string | undefined>(undefined);
   const [error, setError] = useState<keyof typeof RecorderErrors>("NONE");
+  const [init, setInit] = useState<boolean>(false);
+  const mediaEncoderRegistered = useRef<boolean>(false);
 
   useEffect(() => {
+    // avoid re-registering the encoder
+    if (init) {
+      return;
+    }
+
     const setup = async () => {
-      await register(await connect());
+      try {
+        await register(await connect());
+      } catch (e) {
+        //
+      }
+      mediaEncoderRegistered.current = true;
     };
+
     setup();
+    setInit(true);
   }, []);
 
   const getMediaStream = useCallback(async () => {
@@ -167,7 +181,7 @@ export function useReactMediaRecorder({
     }
 
     if (mediaRecorderOptions && mediaRecorderOptions.mimeType) {
-      if (!MediaRecorder.isTypeSupported(mediaRecorderOptions.mimeType)) {
+      if (!MediaRecorder.isTypeSupported(mediaRecorderOptions.mimeType) && mediaEncoderRegistered.current) {
         console.error(
           `The specified MIME type you supplied for MediaRecorder doesn't support this browser`
         );
