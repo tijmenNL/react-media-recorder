@@ -1,6 +1,10 @@
-import { register, MediaRecorder as ExtendableMediaRecorder, IMediaRecorder } from "extendable-media-recorder";
+import {
+  IMediaRecorder,
+  MediaRecorder as ExtendableMediaRecorder,
+  register
+} from "extendable-media-recorder";
 import { ReactElement, useCallback, useEffect, useRef, useState } from "react";
-import { connect } from 'extendable-media-recorder-wav-encoder';
+import { connect } from "extendable-media-recorder-wav-encoder";
 
 export type ReactMediaRecorderRenderProps = {
   error: string;
